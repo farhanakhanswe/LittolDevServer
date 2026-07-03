@@ -6,7 +6,6 @@ const { filesToReloadSet } = require("../filesToReloadSet");
 const fileReloadStateAPIhandler = (url, response) => {
    
     let fileReloadState = false;
-    console.log("reload state url:" + url);
 
     if(filesToReloadSet.has(url)){
         fileReloadState = true;

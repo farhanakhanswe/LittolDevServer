@@ -3,8 +3,6 @@ const { htmlDependenciesMap } = require("../htmlDependenciesMap");
 const config = require("../config.json");
 
 const htmlDependenciesMappingAPIHandler = (request, response) => {
-   
-    console.log("htmlDependenciesMappingAPIHandler hit");
     let body = '';
 
     request.on('data', chunk => {
@@ -31,8 +29,8 @@ const htmlDependenciesMappingAPIHandler = (request, response) => {
             }
         
         }
-        console.log(parsedBody);
-        console.log(htmlDependenciesMap);
+        // console.log(parsedBody);
+        // console.log(htmlDependenciesMap);
 
         response.writeHead(200, {
             'Content-Type': 'application/json'

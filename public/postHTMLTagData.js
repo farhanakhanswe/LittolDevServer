@@ -25,8 +25,6 @@ const payload = {
     "assetLinks": assetLinks,
 }
 
-console.log(payload);
-
 async function postHTMLTagData(){
     try{
         const response = await fetch(htmlDependenciesMappingAPI, {
@@ -42,9 +40,9 @@ async function postHTMLTagData(){
         }
 
         const result = await response.json();
-        console.log("Success: ", result );
+        // console.log("Success: ", result );
     }catch(error){
-        console.log("Error: ", error);
+        // console.log("Error: ", error);
     }
 }
 

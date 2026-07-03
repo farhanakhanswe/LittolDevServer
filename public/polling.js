@@ -1,5 +1,3 @@
-console.log("from polling.js");
-
 const checkFileChange = () => {
     fetch(`/check-file-changes/filename=${window.location.href}`)
         .then(res => res.json())

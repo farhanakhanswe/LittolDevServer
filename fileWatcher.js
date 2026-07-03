@@ -10,7 +10,7 @@ const baseUrl = config.baseUrl;
 
 
 const watchDirectory = (directoryPath) => {
-    console.log(`watching directory path: ${directoryPath}` );
+    // console.log(`watching directory path: ${directoryPath}` );
     
     fs.watch(directoryPath, (eventType, filename) => {
         if (!filename) return;
@@ -18,11 +18,11 @@ const watchDirectory = (directoryPath) => {
         const fullFilePath = path.join(directoryPath, filename);
         if (filesToIgnore(fullFilePath)) return;
 
-        console.log(`eventType: ${eventType} , directory path: ${directoryPath} , fileName: ${filename}, fullpath: ${fullFilePath}`);
+        // console.log(`eventType: ${eventType} , directory path: ${directoryPath} , fileName: ${filename}, fullpath: ${fullFilePath}`);
 
         if(eventType === eventTypeChangeStr){
             const url = convertFilePathToUrl(fullFilePath);
-            console.log(`watcher, converted url : ${url}`);
+            // console.log(`watcher, converted url : ${url}`);
             if(htmlDependenciesMap.has(url)){
                 const htmlLinks = htmlDependenciesMap.get(url);
                 for (const htmlLink of htmlLinks) {
@@ -34,8 +34,8 @@ const watchDirectory = (directoryPath) => {
                 filesToReloadSet.add(baseUrl);
             }
 
-            console.log(htmlDependenciesMap);
-            console.log(filesToReloadSet)
+            // console.log(htmlDependenciesMap);
+            // console.log(filesToReloadSet)
         }
         return;
     });
