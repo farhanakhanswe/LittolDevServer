@@ -2,7 +2,7 @@
 
 A lightweight Live Reload Server built using Vanilla JS and Node.js mainly for early Front-End Development. This automatically reloads the browser when source files change.
 
-This development tool supports multiple browser tab reloads for HTML/JSS/CSS files.
+This development tool supports multiple browser tab reloads for HTML/JS/CSS files.
 
 ### Instructions:
 
