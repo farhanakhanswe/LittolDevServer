@@ -11,7 +11,7 @@ Hit the following paths and observe both the terminal and browser:
 
 -----
 
-(9) Test BUG-1 from bugs.txt: Create two separate projects inside the public folder.
+(9) Test BUG-1 & BUG-2 from bugs.txt: Create two separate projects inside the public folder.
 
     public/
     ├── project1/
@@ -42,4 +42,5 @@ Hit the following paths and observe both the terminal and browser:
     - No reload events are missed.
 
 
-
+(10) Open both http://localhost:3000/ and http://localhost:3000/index.html in two tabs
+     (i) Make changes to index.html and check if both the tabs reload

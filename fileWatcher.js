@@ -1,15 +1,13 @@
 const fs = require("fs");
 const path = require("path");
-const publicStr = "public";
-const eventTypeChangeStr = "change";
 const { filesToIgnore } = require("./public/filesToIgnore");
-const { filePathKeyReloadStateValueMap } = require("./filePathKeyReloadStateValueMap");
+const { htmlDependenciesMap } = require("./htmlDependenciesMap");
+const { filesToReloadSet} = require("./filesToReloadSet")
+const { convertFilePathToUrl } = require("./convertFilePathToUrl");
+const { eventTypeChangeStr, publicStr, rootIndexHTMLFilePath } = require("./helpers/constantsHelper");
+const config = require("./config.json");
+const baseUrl = config.baseUrl;
 
-const convertFilePathToUrl = (filePath) => {
-    let url = filePath.replace(publicStr, "");
-    url = url.replaceAll("\\", "/");
-    return url;
-}
 
 const watchDirectory = (directoryPath) => {
     console.log(`watching directory path: ${directoryPath}` );
@@ -21,15 +19,23 @@ const watchDirectory = (directoryPath) => {
         if (filesToIgnore(fullFilePath)) return;
 
         console.log(`eventType: ${eventType} , directory path: ${directoryPath} , fileName: ${filename}, fullpath: ${fullFilePath}`);
-        console.log(filePathKeyReloadStateValueMap);
 
         if(eventType === eventTypeChangeStr){
             const url = convertFilePathToUrl(fullFilePath);
-            console.log(`convertFilePathToUrl: ${url}`);
-            if(filePathKeyReloadStateValueMap.has(url)){
-                console.log("ES");
-                filePathKeyReloadStateValueMap.set(url, true);
+            console.log(`watcher, converted url : ${url}`);
+            if(htmlDependenciesMap.has(url)){
+                const htmlLinks = htmlDependenciesMap.get(url);
+                for (const htmlLink of htmlLinks) {
+                    filesToReloadSet.add(htmlLink);
+                }
             }
+
+            if(htmlDependenciesMap.has(baseUrl) && fullFilePath === rootIndexHTMLFilePath){
+                filesToReloadSet.add(baseUrl);
+            }
+
+            console.log(htmlDependenciesMap);
+            console.log(filesToReloadSet)
         }
         return;
     });

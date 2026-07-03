@@ -1,21 +1,23 @@
+const config = require("../config.json");
 const { setContentHeader } = require("../setContentHeader");
-const jsonExtensionStr = ".json";
-const { filePathKeyReloadStateValueMap } = require("../filePathKeyReloadStateValueMap");
+const { jsonExtensionStr } = require("../helpers/constantsHelper");
+const { filesToReloadSet } = require("../filesToReloadSet");
 
-const fileReloadStateAPIhandler = (filepath, response) => {
+const fileReloadStateAPIhandler = (url, response) => {
+   
+    let fileReloadState = false;
+    console.log("reload state url:" + url);
+
+    if(filesToReloadSet.has(url)){
+        fileReloadState = true;
+    }
+
     setContentHeader(jsonExtensionStr, response);
-    const fileReloadState = filePathKeyReloadStateValueMap.get(filepath);
-    console.log(`url from fileReloadStateAPIhandler handler: ${filepath}`);
-    console.log(`fileReloadState: ${fileReloadState}`);
-
     response.end(JSON.stringify({
         changed: fileReloadState
     }));
 
-    if(fileReloadState){ 
-        filePathKeyReloadStateValueMap.set(filepath, false);
-    }
-    
+    filesToReloadSet.delete(url);
     return;
 }
 

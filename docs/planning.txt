@@ -42,10 +42,10 @@ containing only this HTML filepath. But, if the key is CSS/JSS filepath then the
 HTML files that are using it.
 Also, I will use a SET to keep track of HTML files that need to be reloaded. I'm using SET to avoid duplicate 
 entries. If I used a queue, let's say one HTML file changed 10 times, then there would be 10 entries in the queue
-and the brower tab will have to reload 10 times. I have to write extra logic for this queue so that duplicates 
+and the browser tab will have to reload 10 times. I have to write extra logic for this queue so that duplicates 
 do not occur. So, it's easier to use JavaScript SET object, since it does not accept duplicates. Also, a queue
 follows FIFO which is First-In-First-Out which is not necessary for this server. It's much easier to use a SET 
-that will not follow any order to deliver which tab should refresh first. 
+that will not follow any order to deliver which tab should reload first. 
 
 So, now the flow would be:
     (a) An HTML file loads in a browser tab and the polling script starts calling the Browser Reload API every 
@@ -86,8 +86,8 @@ start fresh everytime we restart the server. So, I'm deciding on this trade off 
 Now, I'm thinking how often do I need to call the HTML Dependencies Mapping API. Once the HTML file loads and 
 the Mapping API is called once, the CSS and JS files will mapped to the HTML file in the server.
 But, what if I add a new link or script tag inside the HTML file later. 
-Come to think of it, the tab will reload everytime there's a change in the HTML file anyway, and everytime the tab reloads, the Mapping API
-will be called once so that should map the new JS/CSS filepaths in the map.
+Come to think of it, the tab will reload everytime there's a change in the HTML file anyway, and everytime the tab 
+reloads, the Mapping API will be called once so that should add the new JS/CSS filepaths in the map.
 
 * Date: 1st of July, 2026 *
 ------------------------------
@@ -107,6 +107,32 @@ So, now the flow looks like:
     The server will get the HTML filepath from the URL and then check if it exists in the SET. If it does,
     this HTML filepath will be removed from the SET and the related browser tab will reload.
 
+* Date: 2nd of July, 2026 *
+------------------------------
+(1) Both http://localhost:3000/ and http://localhost:3000/index.html will point to the index.html in root 
+    public directory. If both of these urls were hosted in two tabs, and changes were made to index.html, 
+    both should reload. Now, I'm thinking do I need both these urls in the htmlDependenciesMap, or convert 
+    http://localhost:3000/ to http://localhost:3000/index.html so that the map has only one entry for 
+    public/index.html. 
+
+* Date: 3rd of July, 2026 *
+------------------------------
+(1) If a user has visited both the urls: http://localhost:3000/ and http://localhost:3000/index.html, then when the
+    file watcher observes change in the index.html, the system needs to add both of these urls to the SET so that 
+    both of the tabs reload.
+
+    I'm now deciding that I'll keep both the urls in the htmlDependenciesMap map if the user visits them, and not add
+    extra logic to convert http://localhost:3000/ to http://localhost:3000/index.html in the router.js file. 
+    Rather, I'll only add extra logic in the file watcher. If it observes change in the index.html, it will check 
+    if either or both of the urls are available in the map, and push urls to the SET accordingly. 
+
+    Now, what happens if I close the tab and make changes? What happens if I close the tab right before it reloads?
+
+    I don't think there's anything to do for that. If I close the tab and make changes then I will see the changes
+    once I load the url again, and if I close the tab right before it reloads that would mean the polling js has
+    stopped executing. If an API call has already been made then the server's job is to send a response. It doesn't
+    matter if there's no brower to receive that response anymore.
+    
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 * Future Plan *
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -114,3 +140,5 @@ I need to improve the reloading process in the future. Polling script is calling
 there are multiple tabs, each of the tab will have its own polling script. So, hundreds of API calls will be made
 in a short time which could cause browser reload delay.
 
+Script injection needs to improve. What if the file has its own script tags after the body tag and right before html?
+Then, the file's own script tags will not be mapped in the htmlDependenciesMap.
