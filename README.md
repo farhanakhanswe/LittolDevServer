@@ -1,22 +1,26 @@
-## LittolDevServer - A lightweight Live Server Development Tool built using Vanilla JS and Node.js 
+## LittolLiveReloadServer - A lightweight Live Reload Server Development Tool built using Vanilla JS and Node.js 
 
-A lightweight Live Server Development Tool built using Vanilla JS and Node.js mainly for early Front-end Development. This automatically reloads the browser when source files change.
+A lightweight Live Reload Server built using Vanilla JS and Node.js mainly for early Front-End Development. This automatically reloads the browser when source files change.
+
+This development tool supports multiple browser tab reloads for HTML/JSS/CSS files.
 
 ### Instructions:
 
 (1) Install Node.js. </br>
-(2) Add your files inside the public folder. </br>
-(3) Default port is set in config.json file. You may change that to your liking. </br>
-(4) In your terminal, run "node server.js" and check if there's a message saying server is running in your terminal. </br>
-(5) Visit http://localhost:3000/ and then update the browser URL according to your file path. For example: http://localhost:3000/personal-project/index.html </br>
-(6) If you add new folders/files after server starts running, you have to run "node server.js" again so that the
-    server serves the new files.
+(2) Clone this repo, or download the zip file and then unzip it. </br>
+(3) Add your files inside the public folder. </br>
+(4) Default port is set in config.json file. You may change that to your liking. If you do, please also update the baseUrl in the config file.</br>
+(5) In your terminal, run "node server.js" and check if there's a message saying server is running in your terminal. </br>
+(6) Visit http://localhost:3000/ and then update the browser URL according to your file path. For example: http://localhost:3000/personal-project/index.html </br>
+(7) If you add new folders/files after server starts running, you have to run "node server.js" again so that the server serves the new files.
 
 Optional:
 
-(1) Ignore files: You can ignore files that will NOT trigger browser reload when they change. For example: ".git". You have to add that inside the "ignoreList" array inside the public/filesToIgnore.js file.
+(1) Ignore files: You can ignore files that will NOT trigger browser reload when they change. For example: ".git". You have to add that inside the "ignoreList" array inside the public/filesToIgnore.js file. For example: 
 
-i need to give some examples 
+    const ignoreList = [
+        ".git"
+    ];
 
 ### Possible Issue:
 
